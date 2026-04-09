@@ -4,12 +4,18 @@ from flask_migrate import Migrate
 from config import Config
 from models import db, User, ActivityLog
 import requests
+import os
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
 def create_app(config_class=Config):
-    app = Flask(__name__)
+    # Get absolute paths to templates and static files for Vercel environments
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    template_dir = os.path.join(base_dir, 'templates')
+    static_dir = os.path.join(base_dir, 'static')
+    
+    app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
     app.config.from_object(config_class)
 
     db.init_app(app)
