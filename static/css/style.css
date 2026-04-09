@@ -1,0 +1,253 @@
+:root {
+    --primary-navy: #0A192F; 
+    --secondary-navy: #112240;
+    --accent-blue: #64FFDA;  /* Electric Teal for an innovative feel */
+    --brand-green: #7bb442;  
+    --text-white: #E6F1FF;
+    --text-slate: #8892B0;
+    --bg-dark: #0A192F;
+    --bg-light: #F4F7FA;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+    --shadow-premium: 0 20px 50px rgba(0,0,0,0.1);
+}
+
+body {
+    font-family: 'Inter', 'Outfit', sans-serif;
+    color: var(--primary-navy);
+    background-color: var(--bg-light);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, .fw-bold, .navbar-brand {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* Glassmorphism Elements */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+    background: rgba(10, 25, 47, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Navbar - Floating Modern Style */
+.navbar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--primary-navy) !important;
+    text-transform: uppercase;
+}
+
+.navbar-brand span {
+    color: var(--brand-green);
+}
+
+.nav-link {
+    color: var(--primary-navy) !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: 0 15px;
+    position: relative;
+    opacity: 0.8;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-blue);
+    transition: var(--transition);
+}
+
+.nav-link:hover {
+    opacity: 1;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Hero Section - High Impact */
+.hero-section {
+    position: relative;
+    padding: 180px 0 120px;
+    background: linear-gradient(135deg, rgba(10,25,47,0.9) 0%, rgba(17,34,64,0.85) 100%), 
+                url('../images/hero_prospera.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.hero-subtitle {
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.hero-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    color: var(--text-slate);
+    max-width: 650px;
+    margin-bottom: 3rem;
+    line-height: 1.8;
+}
+
+/* Premium Buttons */
+.btn-access {
+    background: var(--brand-green);
+    color: white;
+    border: none;
+    font-weight: 700;
+    padding: 12px 30px;
+    border-radius: 4px;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-access:hover {
+    background: white;
+    color: var(--primary-navy);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.btn-navy {
+    background: var(--primary-navy);
+    color: white;
+}
+
+/* Cards & Innovations */
+.portfolio-card {
+    background: white;
+    border: none;
+    border-radius: 12px;
+    transition: var(--transition);
+    border-bottom: 4px solid transparent;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-premium);
+    border-bottom: 4px solid var(--accent-blue);
+}
+
+.portfolio-img-wrapper {
+    height: 240px;
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+}
+
+.portfolio-card img {
+    transition: var(--transition);
+}
+
+.portfolio-card:hover img {
+    transform: scale(1.1);
+}
+
+/* Category Badges */
+.badge-category {
+    background: rgba(100, 255, 218, 0.1);
+    color: var(--accent-blue);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Footer Overhaul */
+footer {
+    background: var(--bg-dark);
+    color: white;
+    padding: 100px 0 50px;
+}
+
+.footer-brand {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.footer-link {
+    color: var(--text-slate);
+    text-decoration: none;
+    transition: var(--transition);
+    display: block;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.footer-link:hover {
+    color: var(--accent-blue);
+    transform: translateX(5px);
+}
+
+/* Admin Dashboard Elements */
+.admin-card {
+    background: white;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
+}

@@ -1,0 +1,95 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h2 class="fw-bold text-navy mb-0">Procurement Inquiries</h2>
+        <p class="text-muted small">Manage incoming institutional supply requests</p>
+    </div>
+</div>
+
+<div class="portfolio-card bg-white border shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 small">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Entity</th>
+                    <th>Contact Email</th>
+                    <th>Commodity</th>
+                    <th>Volume</th>
+                    <th>Message Snippet</th>
+                    <th>Transmission Date</th>
+                    <th class="text-end pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inquiry in inquiries %}
+                <tr>
+                    <td class="ps-4">
+                        <span class="fw-bold text-navy">{{ inquiry.company_name }}</span>
+                        <div class="text-muted" style="font-size: 0.75rem;">{{ inquiry.contact_person }}</div>
+                    </td>
+                    <td class="small">{{ inquiry.email }}</td>
+                    <td>{{ inquiry.product_name }}</td>
+                    <td class="fw-bold">{{ inquiry.quantity }}</td>
+                    <td class="text-muted small">
+                        {{ inquiry.message[:30] }}{% if inquiry.message|length > 30 %}...{% endif %}
+                    </td>
+                    <td class="text-muted">{{ inquiry.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td class="text-end pe-4">
+                        <button class="btn btn-sm btn-outline-dark rounded-0" data-bs-toggle="modal" data-bs-target="#inquiryModal{{ inquiry.id }}">
+                            View Detail
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- Detail Modal -->
+                <div class="modal fade" id="inquiryModal{{ inquiry.id }}" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content rounded-0 border-0 shadow-lg">
+                            <div class="modal-header bg-navy text-white rounded-0">
+                                <h5 class="modal-title fw-bold">QUOTATION REQUEST DETAIL</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body p-5">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <h6 class="small text-muted text-uppercase fw-bold mb-1">Company</h6>
+                                        <p class="h5 fw-bold text-navy">{{ inquiry.company_name }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="small text-muted text-uppercase fw-bold mb-1">Representative</h6>
+                                        <p class="h6 fw-bold text-navy">{{ inquiry.contact_person }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="small text-muted text-uppercase fw-bold mb-1">Email Terminal</h6>
+                                        <p class="text-primary">{{ inquiry.email }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="small text-muted text-uppercase fw-bold mb-1">Metric Volume</h6>
+                                        <p class="fw-bold">{{ inquiry.quantity }} units of {{ inquiry.product_name }}</p>
+                                    </div>
+                                    <div class="col-12 mt-4">
+                                        <h6 class="small text-muted text-uppercase fw-bold mb-2">Technical Message / Request</h6>
+                                        <div class="p-4 bg-light border">
+                                            {{ inquiry.message }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0 p-4">
+                                <button type="button" class="btn btn-outline-dark rounded-0 px-4" data-bs-dismiss="modal">Close Reference</button>
+                                <a href="mailto:{{ inquiry.email }}" class="btn btn-access rounded-0 px-4">Initialize Response</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not inquiries %}
+                <tr><td colspan="6" class="text-center py-5">No active inquiries recorded in system.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

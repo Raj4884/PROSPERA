@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Logistics & Supply Chain - Prospera Exim{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <span class="category-label">Our Operations</span>
+                <h1 class="fw-bold">Global Logistics Solutions</h1>
+                <p class="lead text-muted">We handle the complexity of the supply chain so you can focus on your business growth. From the farm gate to the international port, we ensure integrity at every step.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <div class="mb-3 text-primary"><i class="fas fa-box-open fa-3x"></i></div>
+                    <h4 class="fw-bold">Warehousing</h4>
+                    <p class="text-muted">Strategic storage facilities near major production hubs ensure that our commodities are stored in optimal conditions to maintain quality and freshness.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <div class="mb-3 text-primary"><i class="fas fa-vial fa-3x"></i></div>
+                    <h4 class="fw-bold">Quality Control</h4>
+                    <p class="text-muted">Every shipment undergoes rigorous testing and certification. We partner with internationally recognized inspection agencies to verify every batch.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <div class="mb-3 text-primary"><i class="fas fa-ship fa-3x"></i></div>
+                    <h4 class="fw-bold">International Shipping</h4>
+                    <p class="text-muted">Our robust network of freight forwarders and shipping lines provides reliable, cost-effective transport to any major port worldwide.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 p-5 bg-white shadow-lg rounded-3">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="fw-bold mb-4">End-to-End Transparency</h2>
+                    <p class="text-muted">At Prospera Exim, we believe that logistics is the backbone of trust. Our digital tracking systems (internal) allow us to monitor movement and ensure compliance with all international trade regulations.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Custom Clearance Management</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Multi-modal Transportation</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Insurance & Risk Mitigation</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Documentation Accuracy</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="{{ url_for('static', filename='images/logistics_hero.png') }}" alt="Logistics Flow" class="img-fluid rounded shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80'">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

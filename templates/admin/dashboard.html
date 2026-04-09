@@ -1,0 +1,180 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h2 class="fw-bold text-navy mb-0">Control Dashboard</h2>
+        <p class="text-muted small">Real-time enterprise intelligence & engagement analytics</p>
+    </div>
+    <div class="text-end">
+        <span class="badge-category">{{ chart_labels[-1] }} - Status: Active</span>
+    </div>
+</div>
+
+<!-- Key Metrics -->
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="admin-card text-center border-0 shadow-sm animate-up">
+            <h6 class="text-muted small text-uppercase fw-bold mb-2">Total Visibility</h6>
+            <h3 class="fw-bold text-navy mb-0">{{ "{:,}".format(total_visitors) }}</h3>
+            <div class="small text-brand-green mt-1"><i class="fas fa-eye me-1"></i> Unique Visits</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-card text-center border-0 shadow-sm animate-up" style="animation-delay: 0.1s;">
+            <h6 class="text-muted small text-uppercase fw-bold mb-2">Active Inquiries</h6>
+            <h3 class="fw-bold text-navy mb-0">{{ total_inquiries }}</h3>
+            <div class="small text-accent-blue mt-1"><i class="fas fa-envelope-open-text me-1"></i> Supply Requests</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-card text-center border-0 shadow-sm animate-up" style="animation-delay: 0.2s;">
+            <h6 class="text-muted small text-uppercase fw-bold mb-2">Inventory Scope</h6>
+            <h3 class="fw-bold text-navy mb-0">{{ total_products }}</h3>
+            <div class="small text-muted mt-1"><i class="fas fa-boxes me-1"></i> Listing Assets</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="admin-card text-center border-0 shadow-sm animate-up" style="animation-delay: 0.3s;">
+            <h6 class="text-muted small text-uppercase fw-bold mb-2">Global Presence</h6>
+            <h3 class="fw-bold text-navy mb-0">{{ country_count }}</h3>
+            <div class="small text-warning mt-1"><i class="fas fa-globe-americas me-1"></i> Markets Tracked</div>
+        </div>
+    </div>
+</div>
+
+<!-- Real Analysis Charts -->
+<div class="row g-4 mb-5">
+    <div class="col-lg-8">
+        <div class="admin-card border-0 shadow-sm animate-up" style="height: 400px;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="fw-bold text-navy mb-0">ENGAGEMENT DYNAMICS (7D)</h6>
+                <div class="small text-muted"><i class="fas fa-info-circle me-1"></i> Traffic vs Intent</div>
+            </div>
+            <canvas id="engagementChart"></canvas>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="admin-card border-0 shadow-sm animate-up" style="height: 400px; animation-delay: 0.1s;">
+            <h6 class="fw-bold text-navy mb-4">REGIONAL DISTRIBUTION</h6>
+            <canvas id="regionChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Top Products -->
+    <div class="col-lg-6">
+        <div class="admin-card border-0 shadow-sm h-100">
+            <h6 class="fw-bold text-navy mb-4">HIGH-TRAFFIC COMMODITIES</h6>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle small">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Commodity</th>
+                            <th class="text-center">Interactions</th>
+                            <th class="text-end">Growth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product, clicks in top_products %}
+                        <tr>
+                            <td class="fw-bold text-navy">{{ product.name }}</td>
+                            <td class="text-center">{{ clicks }}</td>
+                            <td class="text-end text-brand-green small">+{{ (clicks * 0.5)|round|int }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Inquiries -->
+    <div class="col-lg-6">
+        <div class="admin-card border-0 shadow-sm h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="fw-bold text-navy mb-0">RECENT PROCUREMENT REQUESTS</h6>
+                <a href="{{ url_for('admin.view_inquiries') }}" class="small text-accent-blue text-decoration-none fw-bold">VIEW ALL &rarr;</a>
+            </div>
+            <div class="list-group list-group-flush small">
+                {% for inquiry in recent_inquiries %}
+                <div class="list-group-item px-0 border-0 mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold text-navy">{{ inquiry.company_name }}</div>
+                            <div class="text-muted small">{{ inquiry.product_name }} - {{ inquiry.quantity }} Units</div>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge-category px-2 py-1" style="font-size: 0.6rem;">{{ inquiry.created_at.strftime('%H:%M') }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Engagement Chart
+    const ctxEngagement = document.getElementById('engagementChart').getContext('2d');
+    new Chart(ctxEngagement, {
+        type: 'line',
+        data: {
+            labels: {{ chart_labels|tojson }},
+            datasets: [{
+                label: 'Global Visits',
+                data: {{ visits_data|tojson }},
+                borderColor: '#64FFDA',
+                backgroundColor: 'rgba(100, 255, 218, 0.1)',
+                fill: true,
+                tension: 0.4
+            }, {
+                label: 'Inquiries',
+                data: {{ inquiries_data|tojson }},
+                borderColor: '#0A192F',
+                backgroundColor: 'transparent',
+                borderDash: [5, 5],
+                tension: 0.4
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            },
+            scales: {
+                y: { beginAtZero: true, grid: { display: false } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // Regional Chart
+    const ctxRegion = document.getElementById('regionChart').getContext('2d');
+    const countryData = {{ visitor_countries|tojson }};
+    new Chart(ctxRegion, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(countryData),
+            datasets: [{
+                data: Object.values(countryData),
+                backgroundColor: ['#0A192F', '#7bb442', '#64FFDA', '#112240', '#8892B0'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            },
+            cutout: '70%'
+        }
+    });
+</script>
+{% endblock %}

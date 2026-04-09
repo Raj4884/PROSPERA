@@ -1,0 +1,95 @@
+{% extends "skeleton.html" %}
+
+{% block title %}Admin Control Terminal - Prospera Exim{% endblock %}
+
+{% block head %}
+    <style>
+        .admin-sidebar {
+            background-color: var(--primary-navy);
+            min-height: 100vh;
+            color: white;
+            padding-top: 2rem;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        .admin-sidebar .nav-link {
+            color: rgba(255,255,255,0.7) !important;
+            padding: 15px 25px;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .admin-sidebar .nav-link:hover, .admin-sidebar .nav-link.active {
+            background-color: var(--accent-blue);
+            color: white !important;
+        }
+        .admin-content {
+            padding: 3rem;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        .nav-link i {
+            width: 25px;
+            margin-right: 10px;
+            opacity: 0.7;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0 admin-sidebar shadow">
+                <div class="px-4 mb-5 text-center">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Prospera Exim" height="60" class="mb-3">
+                    <h5 class="fw-bold text-white mb-0">PROSPERA EXIM</h5>
+                    <span class="small opacity-50 text-uppercase letter-spacing-1">Control Terminal</span>
+                </div>
+                <nav class="nav flex-column">
+                    <a class="nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}" href="{{ url_for('admin.dashboard') }}">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                    <a class="nav-link {% if request.endpoint == 'admin.manage_products' %}active{% endif %}" href="{{ url_for('admin.manage_products') }}">
+                        <i class="fas fa-boxes"></i> Inventory
+                    </a>
+                    <a class="nav-link {% if request.endpoint == 'admin.manage_categories' %}active{% endif %}" href="{{ url_for('admin.manage_categories') }}">
+                        <i class="fas fa-tags"></i> Taxonomy
+                    </a>
+                    <a class="nav-link {% if request.endpoint == 'admin.view_inquiries' %}active{% endif %}" href="{{ url_for('admin.view_inquiries') }}">
+                        <i class="fas fa-envelope"></i> Inquiries
+                    </a>
+                    <a class="nav-link {% if request.endpoint == 'admin.view_activity' %}active{% endif %}" href="{{ url_for('admin.view_activity') }}">
+                        <i class="fas fa-history"></i> Activity Log
+                    </a>
+                    <hr class="bg-white mx-3 opacity-10 my-4">
+                    <a class="nav-link" href="{{ url_for('public.index') }}">
+                        <i class="fas fa-external-link-alt"></i> External Site
+                    </a>
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                        <i class="fas fa-sign-out-alt"></i> Terminate Session
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-md-9 col-lg-10 admin-content">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block admin_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

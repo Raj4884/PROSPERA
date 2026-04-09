@@ -1,0 +1,85 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">User Activity Log</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Recent Page Visits</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Page</th>
+                                <th>IP Address</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log, user_name in activities %}
+                            <tr>
+                                <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>
+                                    {% if user_name %}
+                                        <span class="badge bg-primary">{{ user_name }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Guest</span>
+                                    {% endif %}
+                                </td>
+                                <td><code>{{ log.page_visited }}</code></td>
+                                <td><small class="text-muted">{{ log.ip_address }}</small></td>
+                                <td>{{ log.country or 'Unknown' }} {{ log.state or '' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Product Interactions</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Product Viewed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for click, user_name, product_name in product_clicks %}
+                            <tr>
+                                <td>{{ click.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>
+                                    {% if user_name %}
+                                        <span class="badge bg-primary">{{ user_name }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Guest</span>
+                                    {% endif %}
+                                </td>
+                                <td><span class="fw-bold">{{ product_name }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

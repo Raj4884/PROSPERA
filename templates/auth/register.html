@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Prospera Exim{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light min-vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="portfolio-card bg-white p-5 shadow-sm">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold text-navy">Partner Registration</h2>
+                        <p class="text-muted small">Join the Prospera Exim Enterprise Network</p>
+                    </div>
+                    <form method="POST">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">Full Legal Name</label>
+                                <input type="text" name="name" class="form-control rounded-0" placeholder="John Doe" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">Corporate Email</label>
+                                <input type="email" name="email" class="form-control rounded-0" placeholder="john@enterprise.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">Registered Company Name</label>
+                                <input type="text" name="company" class="form-control rounded-0" placeholder="Global Trade Inc." required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">Secure Password</label>
+                                <input type="password" name="password" class="form-control rounded-0" placeholder="••••••••" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">Country / Region</label>
+                                <input type="text" name="country" class="form-control rounded-0" placeholder="India / USA / UAE" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">State / Province</label>
+                                <input type="text" name="state" class="form-control rounded-0" placeholder="Maharashtra / California" required>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <button type="submit" class="btn btn-access w-100 py-3 mb-4">Register for Institutional Access</button>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-muted small">Already registered? <a href="{{ url_for('auth.login') }}" class="text-primary fw-bold text-decoration-none">Sign In</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

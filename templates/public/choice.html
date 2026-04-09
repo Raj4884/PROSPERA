@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Procurement Gate - Prospera Exim{% endblock %}
+
+{% block content %}
+<section class="hero-section min-vh-100 d-flex align-items-center position-relative" style="background: linear-gradient(rgba(10,25,47,0.85), rgba(10,25,47,0.85)), url('{{ url_for('static', filename='images/hero_prospera.png') }}'); background-size: cover; background-position: center; background-attachment: fixed; padding: 100px 0;">
+    <div class="container animate-up">
+        <div class="text-center mb-5">
+            <span class="badge-category mb-3">Enterprise Access</span>
+            <h1 class="hero-title text-white">Procurement <span class="text-brand-green">Gate</span></h1>
+            <p class="text-slate mx-auto" style="max-width: 600px;">Initialize your specialized supply chain infrastructure. Select a terminal to begin institutional procurement.</p>
+            
+            {% if current_user.is_authenticated and current_user.is_admin %}
+                <div class="mt-4">
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-access rounded-0 py-3 px-5 shadow-lg">
+                        <i class="fas fa-user-shield me-2"></i> OPEN ADMIN CONTROL PANEL
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row justify-content-center g-4 mt-2">
+            <!-- Domestic Terminal -->
+            <div class="col-md-5">
+                <a href="{{ url_for('public.catalog', supply_type='Domestic') }}" class="text-decoration-none d-block h-100">
+                    <div class="portfolio-card glass-dark p-5 h-100 text-center transition" style="border-top: 5px solid var(--brand-green) !important;">
+                        <div class="mb-4">
+                            <i class="fas fa-truck-loading fa-4x text-brand-green shadow-sm"></i>
+                        </div>
+                        <h3 class="fw-bold text-white mb-3">Domestic Hub</h3>
+                        <p class="text-slate small mb-4">Institutional grade sourcing for Pan-India enterprise operations and state-level distribution.</p>
+                        <span class="btn btn-outline-light rounded-0 px-4 transition">INITIALIZE DOMESTIC TERMINAL</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- International Terminal -->
+            <div class="col-md-5">
+                <a href="{{ url_for('public.catalog', supply_type='International') }}" class="text-decoration-none d-block h-100">
+                    <div class="portfolio-card glass-dark p-5 h-100 text-center transition" style="border-top: 5px solid var(--accent-blue) !important;">
+                        <div class="mb-4">
+                            <i class="fas fa-ship fa-4x text-accent-blue shadow-sm"></i>
+                        </div>
+                        <h3 class="fw-bold text-white mb-3">Export Terminal</h3>
+                        <p class="text-slate small mb-4">Global compliance, cross-border logistics, and international trade verification frameworks.</p>
+                        <span class="btn btn-outline-light rounded-0 px-4 transition">INITIALIZE GLOBAL TERMINAL</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <p class="text-slate small"><i class="fas fa-lock me-2"></i> Secure Institutional Authentication Active for {{ current_user.name }}</p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .glass-dark:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-10px);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    }
+    .badge-category {
+        display: inline-block;
+        background: rgba(100, 255, 218, 0.1);
+        color: var(--accent-blue);
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.75rem;
+    }
+</style>
+{% endblock %}

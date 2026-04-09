@@ -1,0 +1,115 @@
+{% extends "skeleton.html" %}
+
+{% block body %}
+    <nav class="navbar navbar-expand-lg sticky-top shadow-sm">
+        <div class="container py-1">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('public.index') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Prospera Exim" height="42" class="me-3">
+                <span class="text-navy">PROSPERA</span><span class="text-brand-green">EXIM</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-navy"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="{{ url_for('public.index') }}">Solutions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="{{ url_for('public.choice') }}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="{{ url_for('public.logistics') }}">Logistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="{{ url_for('public.company') }}">Enterprise</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    {% if current_user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-access dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                                {{ current_user.name }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                {% if current_user.is_admin %}
+                                    <li><a class="dropdown-item" href="{{ url_for('admin.dashboard') }}">Admin Panel</a></li>
+                                {% endif %}
+                                <li><a class="dropdown-item" href="{{ url_for('public.my_inquiries') }}">My Inquiries</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-access">Access Portal</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for message in messages %}
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <div class="footer-brand"><span class="text-white">PROSPERA</span><span class="text-brand-green">EXIM</span></div>
+                    <p class="text-slate small">An institutional-grade partner connecting Indian production centers with the global enterprise ecosystem through technology and integrity.</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle" style="width: 32px; height: 32px; padding: 0; line-height: 30px;"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle" style="width: 32px; height: 32px; padding: 0; line-height: 30px;"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2 ms-lg-auto">
+                    <h6 class="fw-bold mb-4 text-accent-blue small text-uppercase letter-spacing-2">Solutions</h6>
+                    <a href="#" class="footer-link">Export Terminal</a>
+                    <a href="#" class="footer-link">Bulk Sourcing</a>
+                    <a href="#" class="footer-link">Logistics Framework</a>
+                    <a href="#" class="footer-link">Quality Audit</a>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <h6 class="fw-bold mb-4 text-accent-blue small text-uppercase letter-spacing-2">Governance</h6>
+                    <a href="#" class="footer-link">Compliance</a>
+                    <a href="#" class="footer-link">Sustainability</a>
+                    <a href="#" class="footer-link">Grievance Cell</a>
+                    <a href="#" class="footer-link">Legal Terms</a>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <h6 class="fw-bold mb-4 text-accent-blue small text-uppercase letter-spacing-2">Global Access</h6>
+                    <p class="text-slate small mb-2"><i class="fas fa-map-marker-alt me-2 text-brand-green"></i> 2663 A5 Bward Mangalward peth, Kolhapur, Maharashtra, India 416012</p>
+                    <p class="text-slate small mb-2"><i class="fas fa-globe me-2 text-accent-blue"></i> Canada: Regina operations hub</p>
+                    <p class="text-slate small mb-2"><i class="fas fa-envelope me-2"></i> info@prosperaexim.in</p>
+                    <p class="text-slate small"><i class="fas fa-phone-alt me-2"></i> +91 9270741224 | +1 3065266889</p>
+                </div>
+            </div>
+            <hr class="my-5 opacity-10">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-slate small mb-0">&copy; 2026 Prospera Exim Enterprise. All rights reserved property protected.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex justify-content-md-end gap-4 mt-3 mt-md-0">
+                        <a href="#" class="text-slate small text-decoration-none">Privacy Policy</a>
+                        <a href="#" class="text-slate small text-decoration-none">Terms of Service</a>
+                        <a href="#" class="text-slate small text-decoration-none">GDPR</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

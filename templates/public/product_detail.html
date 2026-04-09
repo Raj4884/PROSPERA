@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} Specification - Prospera Exim Hub{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5 mb-5 shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <div class="d-flex align-items-center mb-1">
+                <h1 class="fw-bold mb-0 me-3">Product Specifications</h1>
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                    <a href="{{ url_for('admin.edit_product', product_id=product.id) }}" class="btn btn-light btn-sm fw-bold">
+                        <i class="fas fa-edit me-1"></i> Edit Product
+                    </a>
+                {% endif %}
+            </div>
+            <p class="small opacity-75 mb-0">Institutional Commodity Inventory & Global Sourcing Protocols</p>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{{ url_for('public.catalog', supply_type=product.supply_type) }}" class="text-white opacity-75">{{ product.supply_type }} Supply</a></li>
+                <li class="breadcrumb-item active text-white fw-bold" aria-current="page">{{ product.name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row g-5">
+        <!-- Product Info -->
+        <div class="col-lg-6">
+            <div class="portfolio-card bg-white border shadow-sm mb-4">
+                <div class="portfolio-img-wrapper" style="height: 400px;">
+                    {% if product.image_path %}
+                        <img src="{{ product.image_path }}" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">
+                            <i class="fas fa-cube fa-4x opacity-25"></i>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+
+            <div class="portfolio-card bg-white p-4 border shadow-sm">
+                <h5 class="fw-bold text-navy mb-3">Specifications</h5>
+                <p class="text-muted mb-4">{{ product.description }}</p>
+                
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="p-3 bg-light border">
+                            <span class="small text-muted d-block text-uppercase fw-bold">Starting MOQ</span>
+                            <span class="fw-bold">{{ product.moq }}</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light border">
+                            <span class="small text-muted d-block text-uppercase fw-bold">Market Type</span>
+                            <span class="fw-bold">{{ product.supply_type }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-3 border-start border-primary border-4 bg-light">
+                    <p class="small mb-0 fst-italic text-muted"><strong>Trust Note:</strong> We provide real-time photos and laboratory reports only after an initial discussion to protect our producers' intellectual property and ensure you receive the most recent data.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inquiry Form -->
+        <div class="col-lg-6">
+            <div class="portfolio-card bg-white p-5 border shadow-sm sticky-top" style="top: 100px;">
+                <div class="mb-4">
+                    <h4 class="fw-bold text-navy">Request for Quotation</h4>
+                    <p class="text-muted small">Fill out this simple form to start your procurement journey. No obligation required.</p>
+                </div>
+                
+                <form action="{{ url_for('public.product_detail', product_id=product.id) }}" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Company Name</label>
+                            <input type="text" name="company_name" class="form-control rounded-0" value="{{ current_user.company_name }}" placeholder="Your Business Name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Your Name</label>
+                            <input type="text" name="contact_person" class="form-control rounded-0" value="{{ current_user.name }}" placeholder="Full Name" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small">Email Address</label>
+                            <input type="email" name="email" class="form-control rounded-0" value="{{ current_user.email }}" placeholder="email@example.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Country</label>
+                            <input type="text" name="country" class="form-control rounded-0" value="{{ current_user.country }}" placeholder="Country" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">State</label>
+                            <input type="text" name="state" class="form-control rounded-0" value="{{ current_user.state }}" placeholder="State" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small">Estimated Quantity Required</label>
+                            <input type="text" name="quantity" class="form-control rounded-0" placeholder="e.g. 5000 KG" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small">Any Questions or Special Requests?</label>
+                            <textarea name="message" class="form-control rounded-0" rows="4" placeholder="Tell us if you are new and need more information about shipping, quality, or packaging..."></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-access w-100 py-3 mt-4">Send My Inquiry</button>
+                    <p class="text-center mt-3 mb-0">
+                        <small class="text-muted fst-italic"><i class="fas fa-lock me-1"></i> Your details are safe with us and will only be used for this inquiry.</small>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
