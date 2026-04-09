@@ -55,6 +55,12 @@ def create_app(config_class=Config):
             db.session.add(log)
             db.session.commit()
 
+    @app.route('/init-db')
+    def init_db():
+        from setup_db import setup
+        setup()
+        return "Database Initialized Successfully! You can now go to the home page."
+
     return app
 
 app = create_app()
