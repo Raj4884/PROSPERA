@@ -11,3 +11,9 @@ class Config:
     
     # Analytics settings
     GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID')
+
+    # Database stability for serverless
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 280,
+    }
