@@ -31,6 +31,8 @@ def create_app(config_class=Config):
 
     @app.before_request
     def track_activity():
+        if request.endpoint == 'init_db':
+            return
         if request.endpoint and 'static' not in request.endpoint:
             ip = request.headers.get('X-Forwarded-For', request.remote_addr)
             if ',' in ip: ip = ip.split(',')[0]
