@@ -43,7 +43,7 @@ def create_app(config_class=Config):
             ip = request.headers.get('X-Forwarded-For', request.remote_addr)
             if ',' in ip: ip = ip.split(',')[0]
             
-            log = ActivityLog(
+            activity = ActivityLog(
                 user_id=current_user.id if current_user.is_authenticated else None,
                 session_id=session.get('_id'),
                 page_visited=request.path,
@@ -55,13 +55,13 @@ def create_app(config_class=Config):
                 try:
                     response = requests.get(f'http://ip-api.com/json/{ip}', timeout=2).json()
                     if response.get('status') == 'success':
-                        log.country = response.get('country')
-                        log.state = response.get('regionName')
+                        activity.country = response.get('country')
+                        activity.state = response.get('regionName')
                 except:
                     pass
             
             try:
-                db.session.add(log)
+                db.session.add(activity)
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
@@ -71,13 +71,15 @@ def create_app(config_class=Config):
     @app.route('/init-db')
     def init_db():
         try:
+            # Force schema update by dropping and recreating
+            db.drop_all()
+            db.create_all()
             from setup_db import setup
             setup()
-            return "Database Initialized Successfully! You can now go to the home page."
+            return "Database Re-Initialized Successfully (Schema Updated)!"
         except Exception as e:
             import traceback
             error_details = traceback.format_exc()
-            print(f"DEBUG: init-db failed: {error_details}")
             return f"Database Initialization Failed!<br><br>Error: {str(e)}<br><pre>{error_details}</pre>", 500
 
     return app
