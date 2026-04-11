@@ -93,6 +93,36 @@ def create_app(config_class=Config):
         setup()
         return "Database Initialized Successfully! You can now go to the home page."
 
+    @app.route('/debug-paths')
+    def debug_paths():
+        import json
+        info = {
+            '__file__': __file__,
+            'abs_file': os.path.abspath(__file__),
+            'dirname': os.path.dirname(os.path.abspath(__file__)),
+            'cwd': os.getcwd(),
+            'template_folder': app.template_folder,
+            'template_folder_exists': os.path.exists(app.template_folder) if app.template_folder else False,
+        }
+        
+        # List /var/task contents
+        task_dir = '/var/task'
+        if os.path.exists(task_dir):
+            info['var_task_contents'] = []
+            for root, dirs, files in os.walk(task_dir):
+                # Skip _vendor to avoid massive output
+                dirs[:] = [d for d in dirs if d != '_vendor' and d != '__pycache__']
+                for f in files:
+                    info['var_task_contents'].append(os.path.join(root, f))
+        
+        # List CWD contents
+        try:
+            info['cwd_contents'] = os.listdir(os.getcwd())
+        except:
+            info['cwd_contents'] = 'error listing'
+            
+        return json.dumps(info, indent=2, default=str), 200, {'Content-Type': 'application/json'}
+
     return app
 
 app = create_app()
