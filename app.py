@@ -70,9 +70,15 @@ def create_app(config_class=Config):
 
     @app.route('/init-db')
     def init_db():
-        from setup_db import setup
-        setup()
-        return "Database Initialized Successfully! You can now go to the home page."
+        try:
+            from setup_db import setup
+            setup()
+            return "Database Initialized Successfully! You can now go to the home page."
+        except Exception as e:
+            import traceback
+            error_details = traceback.format_exc()
+            print(f"DEBUG: init-db failed: {error_details}")
+            return f"Database Initialization Failed!<br><br>Error: {str(e)}<br><pre>{error_details}</pre>", 500
 
     return app
 
