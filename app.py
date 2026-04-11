@@ -71,12 +71,23 @@ def create_app(config_class=Config):
     @app.route('/init-db')
     def init_db():
         try:
-            # Force schema update by dropping and recreating
-            db.drop_all()
+            from sqlalchemy import text
+            # Step 1: Force the column size update directly on Postgres
+            try:
+                db.session.execute(text('ALTER TABLE "user" ALTER COLUMN password_hash TYPE VARCHAR(255)'))
+                db.session.commit()
+                print("DEBUG: Column size updated successfully.")
+            except Exception as e:
+                db.session.rollback()
+                print(f"DEBUG: Migration skipped (column might already be updated or table missing): {e}")
+
+            # Step 2: Create all other tables if missing
             db.create_all()
+
+            # Step 3: Run the data seeding script
             from setup_db import setup
             setup()
-            return "Database Re-Initialized Successfully (Schema Updated)!"
+            return "Database Migration & Initialization Successful! You can now log in."
         except Exception as e:
             import traceback
             error_details = traceback.format_exc()
