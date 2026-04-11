@@ -6,10 +6,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy()
 
 class User(UserMixin, db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255))
+    password_hash = db.Column(db.String(500))
     company_name = db.Column(db.String(200))
     country = db.Column(db.String(100))
     state = db.Column(db.String(100))
@@ -40,7 +41,7 @@ class Product(db.Model):
 
 class Inquiry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # Optional link to registered user
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True) # Optional link to registered user
     company_name = db.Column(db.String(200), nullable=False)
     contact_person = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), nullable=False)
@@ -53,7 +54,7 @@ class Inquiry(db.Model):
 
 class ActivityLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     session_id = db.Column(db.String(100))
     page_visited = db.Column(db.String(200))
     ip_address = db.Column(db.String(50))
@@ -64,5 +65,5 @@ class ActivityLog(db.Model):
 class ProductClick(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)

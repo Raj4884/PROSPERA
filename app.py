@@ -74,26 +74,27 @@ def create_app(config_class=Config):
             from sqlalchemy import text
             # Step 1: Forcefully drop existing tables to clear the legacy schema
             try:
-                # Dropping in specific order to handle constraints, using CASCADE for safety
+                # Dropping in specific order, including both 'user' and 'users' variations
                 db.session.execute(text('DROP TABLE IF EXISTS product_click CASCADE'))
                 db.session.execute(text('DROP TABLE IF EXISTS activity_log CASCADE'))
                 db.session.execute(text('DROP TABLE IF EXISTS inquiry CASCADE'))
                 db.session.execute(text('DROP TABLE IF EXISTS product CASCADE'))
                 db.session.execute(text('DROP TABLE IF EXISTS category CASCADE'))
                 db.session.execute(text('DROP TABLE IF EXISTS "user" CASCADE'))
+                db.session.execute(text('DROP TABLE IF EXISTS users CASCADE'))
                 db.session.commit()
                 print("DEBUG: Legacy schema dropped successfully.")
             except Exception as e:
                 db.session.rollback()
                 print(f"DEBUG: Drop failed or items missing: {e}")
 
-            # Step 2: Recreate all tables with the new 255-char schema
+            # Step 2: Recreate all tables with the new 500-char schema
             db.create_all()
 
             # Step 3: Run the data seeding script
             from setup_db import setup
             setup()
-            return "Database Clean Reset & Initialization Successful! You can now log in with the admin account."
+            return "Final Table Migration & Initialization Successful! You can now log in."
         except Exception as e:
             import traceback
             error_details = traceback.format_exc()
