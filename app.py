@@ -72,22 +72,28 @@ def create_app(config_class=Config):
     def init_db():
         try:
             from sqlalchemy import text
-            # Step 1: Force the column size update directly on Postgres
+            # Step 1: Forcefully drop existing tables to clear the legacy schema
             try:
-                db.session.execute(text('ALTER TABLE "user" ALTER COLUMN password_hash TYPE VARCHAR(255)'))
+                # Dropping in specific order to handle constraints, using CASCADE for safety
+                db.session.execute(text('DROP TABLE IF EXISTS product_click CASCADE'))
+                db.session.execute(text('DROP TABLE IF EXISTS activity_log CASCADE'))
+                db.session.execute(text('DROP TABLE IF EXISTS inquiry CASCADE'))
+                db.session.execute(text('DROP TABLE IF EXISTS product CASCADE'))
+                db.session.execute(text('DROP TABLE IF EXISTS category CASCADE'))
+                db.session.execute(text('DROP TABLE IF EXISTS "user" CASCADE'))
                 db.session.commit()
-                print("DEBUG: Column size updated successfully.")
+                print("DEBUG: Legacy schema dropped successfully.")
             except Exception as e:
                 db.session.rollback()
-                print(f"DEBUG: Migration skipped (column might already be updated or table missing): {e}")
+                print(f"DEBUG: Drop failed or items missing: {e}")
 
-            # Step 2: Create all other tables if missing
+            # Step 2: Recreate all tables with the new 255-char schema
             db.create_all()
 
             # Step 3: Run the data seeding script
             from setup_db import setup
             setup()
-            return "Database Migration & Initialization Successful! You can now log in."
+            return "Database Clean Reset & Initialization Successful! You can now log in with the admin account."
         except Exception as e:
             import traceback
             error_details = traceback.format_exc()
