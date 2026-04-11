@@ -15,6 +15,25 @@ def create_app(config_class=Config):
     template_dir = os.path.join(base_dir, 'templates')
     static_dir = os.path.join(base_dir, 'static')
     
+    # Debug: Log template directory for Vercel troubleshooting
+    print(f"[STARTUP] Base dir: {base_dir}")
+    print(f"[STARTUP] Template dir: {template_dir}")
+    print(f"[STARTUP] Template dir exists: {os.path.exists(template_dir)}")
+    if os.path.exists(template_dir):
+        for root, dirs, files in os.walk(template_dir):
+            for f in files:
+                print(f"[STARTUP] Template found: {os.path.join(root, f)}")
+    else:
+        print(f"[STARTUP] WARNING: Template directory does not exist!")
+        print(f"[STARTUP] CWD: {os.getcwd()}")
+        print(f"[STARTUP] CWD contents: {os.listdir(os.getcwd())}")
+        # Try to find templates relative to CWD as fallback
+        cwd_template_dir = os.path.join(os.getcwd(), 'templates')
+        if os.path.exists(cwd_template_dir):
+            print(f"[STARTUP] Found templates at CWD-relative path: {cwd_template_dir}")
+            template_dir = cwd_template_dir
+            static_dir = os.path.join(os.getcwd(), 'static')
+    
     app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
     app.config.from_object(config_class)
 
