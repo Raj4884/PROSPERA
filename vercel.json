@@ -17,10 +17,7 @@
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "app.py"
-    },
+    { "handle": "filesystem" },
     {
       "src": "/(.*)",
       "dest": "app.py"
