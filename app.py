@@ -82,7 +82,29 @@ def create_app(config_class=Config):
 
     return app
 
-app = create_app()
+def create_failsafe_app(error_msg):
+    app = Flask(__name__)
+    @app.route('/')
+    @app.route('/<path:path>')
+    def error_page(path=''):
+        return f"""
+        <html>
+        <head><title>App Startup Failed</title></head>
+        <body style="font-family: sans-serif; padding: 40px; line-height: 1.6;">
+            <h1 style="color: #d32f2f;">Critical: App Startup Failed</h1>
+            <p>The application encountered an error while initializing. This is likely due to a missing environment variable or a database connection issue.</p>
+            <h3>Traceback:</h3>
+            <pre style="background: #f4f4f4; padding: 20px; border-left: 5px solid #d32f2f; overflow-x: auto;">{error_msg}</pre>
+        </body>
+        </html>
+        """, 500
+    return app
+
+try:
+    app = create_app()
+except Exception as e:
+    import traceback
+    app = create_failsafe_app(traceback.format_exc())
 
 if __name__ == '__main__':
     app.run(debug=True)
