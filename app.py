@@ -68,6 +68,10 @@ def create_app(config_class=Config):
                 # Log the error but don't crash the user's request
                 print(f"Database error in track_activity: {e}")
 
+    @app.route('/version')
+    def get_version():
+        return "v1.1-RENAME-MIGRATION-ACTIVE"
+
     @app.route('/init-db')
     def init_db():
         try:
