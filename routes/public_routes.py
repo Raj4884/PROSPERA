@@ -6,12 +6,12 @@ public_bp = Blueprint('public', __name__)
 
 @public_bp.route('/')
 def index():
-    return render_template('public/index.html')
+    return render_template('pages/index.html')
 
 @public_bp.route('/choice')
 @login_required
 def choice():
-    return render_template('public/choice.html')
+    return render_template('pages/choice.html')
 
 @public_bp.route('/catalog/<supply_type>')
 @login_required
@@ -27,7 +27,7 @@ def catalog(supply_type):
         query = query.filter_by(category_id=category_id)
     
     products = query.all()
-    return render_template('public/catalog.html', products=products, categories=categories, supply_type=supply_type)
+    return render_template('pages/catalog.html', products=products, categories=categories, supply_type=supply_type)
 
 @public_bp.route('/product/<int:product_id>', methods=['GET', 'POST'])
 @login_required
@@ -59,18 +59,18 @@ def product_detail(product_id):
         flash('Inquiry submitted successfully! We will contact you soon.')
         return redirect(url_for('public.product_detail', product_id=product_id))
         
-    return render_template('public/product_detail.html', product=product)
+    return render_template('pages/product_detail.html', product=product)
 
 @public_bp.route('/logistics')
 def logistics():
-    return render_template('public/logistics.html')
+    return render_template('pages/logistics.html')
 
 @public_bp.route('/company')
 def company():
-    return render_template('public/company.html')
+    return render_template('pages/company.html')
 
 @public_bp.route('/my-inquiries')
 @login_required
 def my_inquiries():
     inquiries = Inquiry.query.filter_by(user_id=current_user.id).order_by(Inquiry.created_at.desc()).all()
-    return render_template('public/my_inquiries.html', inquiries=inquiries)
+    return render_template('pages/my_inquiries.html', inquiries=inquiries)
